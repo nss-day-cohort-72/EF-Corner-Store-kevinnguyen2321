@@ -1,16 +1,12 @@
+namespace CornerStore.Models.DTOs;
 
-using System.ComponentModel.DataAnnotations;
-
-namespace CornerStore.Models;
-
-public class Order
+public class OrderDTO
 {
  public int Id {get;set;}
- [Required]
  public int CashierId {get;set;}
- public Cashier Cashier {get;set;} 
+ public CashierDTO Cashier {get;set;}
  public DateTime? PaidOnDate {get;set;}
- public List<OrderProduct> OrderProducts {get;set;} = new List<OrderProduct>();
+ public List<OrderProductDTO> OrderProducts {get;set;} = new List<OrderProductDTO>();
   public decimal Total
     {
         get
@@ -21,7 +17,7 @@ public class Order
             }
 
             decimal total = 0m;
-            foreach (OrderProduct op in OrderProducts)
+            foreach (OrderProductDTO op in OrderProducts)
             {
                 total += op.Product.Price * op.Quantity;
             }

@@ -34,6 +34,11 @@ app.UseHttpsRedirection();
 
 //endpoints go here
 
+app.MapPost("/cashiers", (CornerStoreDbContext db, Cashier cashier) => {
+    db.Cashiers.Add(cashier)
+
+});
+
 app.Run();
 
 //don't move or change this!
