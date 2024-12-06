@@ -1,0 +1,20 @@
+/cashiers
+-Add a cashier ✔
+-✔Get a cashier (include their orders, and the orders' products).
+
+/products
+-✔Get all products with categories. If the search query string param is present, return only products whose names or category names include the search value (ignore case).
+-✔Add a product
+-✔Update a product
+
+/orders
+✔-Get an order details, including the cashier, order products, 
+and products on the order with their category.
+
+✔-Get all orders. Check for a query string param orderDate 
+that only returns orders from a particular day. 
+  If it is not present, return all orders.
+
+-Delete an order ✔
+
+-Create an Order (with products!) ✔
