@@ -38,11 +38,24 @@ app.UseHttpsRedirection();
 
 //endpoints go here
 
-app.MapPost("/cashiers", (CornerStoreDbContext db, Cashier cashier) => {
+app.MapPost("/cashiers", (CornerStoreDbContext db, CashierDTO cashierDTO) => {
+    Cashier cashier = new Cashier
+    {
+        FirstName = cashierDTO.FirstName,
+        LastName = cashierDTO.LastName
+    };
+    
     db.Cashiers.Add(cashier);
     db.SaveChanges();
     
-    return Results.Created($"/cashiers/{cashier.Id}", cashier);
+    return Results.Created($"/cashiers/{cashier.Id}",  new CashierDTO
+    {
+        Id = cashier.Id,
+        FirstName = cashier.FirstName,
+        LastName = cashier.LastName
+    }
+    
+    );
 
 });
 
@@ -130,12 +143,29 @@ app.MapGet("/products", (CornerStoreDbContext db, string? productName, string? c
 });
 
 
-app.MapPost("/products", (CornerStoreDbContext db, Product product) => {
+app.MapPost("/products", (CornerStoreDbContext db, ProductDTO productDTO) => {
     
+    Product product = new Product
+    {
+        Id = productDTO.Id,
+        ProductName = productDTO.ProductName,
+        Price = productDTO.Price,
+        Brand = productDTO.Brand,
+        CategoryId = productDTO.CategoryId
+    };
     db.Products.Add(product);
     db.SaveChanges();
 
-    return Results.Created($"/products/{product.Id}", product);
+    return Results.Created($"/products/{product.Id}", new ProductDTO
+    {
+        Id = product.Id,
+        ProductName = product.ProductName,
+        Price = product.Price,
+        Brand = product.Brand,
+        CategoryId = product.CategoryId
+    }
+    
+    );
 
 });
 
@@ -252,8 +282,20 @@ app.MapDelete("/orders/{id}", (CornerStoreDbContext db, int id) => {
     return Results.NoContent();
 });
 
-app.MapPost("/orders", (CornerStoreDbContext db, Order order) => {
-    order.PaidOnDate = DateTime.Now;
+app.MapPost("/orders", (CornerStoreDbContext db, OrderDTO orderDTO) => {
+    orderDTO.PaidOnDate = DateTime.Now;
+
+    Order order = new Order
+    {
+       CashierId = orderDTO.CashierId,
+       PaidOnDate = orderDTO.PaidOnDate,
+       OrderProducts = orderDTO.OrderProducts.Select(op => new OrderProduct
+       {
+        ProductId = op.ProductId,
+        Quantity = op.Quantity
+        
+        }).ToList()
+    };
     
     db.Orders.Add(order);
   
